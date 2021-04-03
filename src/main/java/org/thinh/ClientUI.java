@@ -97,8 +97,6 @@ public class ClientUI extends Application {
         HBox rightHBox = new HBox(hostname);
         rightHBox.setAlignment(Pos.CENTER_RIGHT);
 
-        FileSharerClient client = new FileSharerClient();
-
         TreeView<File> clientView = new TreeView<>();
         clientView.setMinHeight(460);
         TreeItem<File> root = new TreeItem<>(rootFolder);
@@ -135,8 +133,13 @@ public class ClientUI extends Application {
         serverView.setMinHeight(460);
         TreeItem<String> serverRoot = new TreeItem<>("Server", new ImageView("/images/icon-server.png"));
         serverRoot.setExpanded(true);
-        refreshServer(serverRoot, "A\nB\nC\n");
-        //refreshServer(serverView, client.dir());
+        try {
+            FileSharerClient client = new FileSharerClient();
+            refreshServer(serverRoot, client.dir());
+        } catch (IOException e) {
+            System.err.println("Can not update server folder");
+            e.printStackTrace();
+        }
         serverView.setRoot(serverRoot);
 
         grid.add(leftHBox,0,0,3,1);
@@ -161,48 +164,44 @@ public class ClientUI extends Application {
 
         uploadBtn.setOnAction(event -> {
             try {
-                String content = "";
+                FileSharerClient clientTemp;
                 if (uploadFile[0].isDirectory()) {
                     System.err.println("Can not upload folder");
                 } else {
-                    BufferedReader reader = new BufferedReader(new FileReader(uploadFile[0]));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        content += line + "\n";
-                    }
+                    clientTemp = new FileSharerClient();
+                    clientTemp.upload(uploadFile[0]);
                 }
-                System.out.println(content);
-                //client.upload(uploadFile[0].getName(), content);
                 refreshLocal(root, rootFolder);
-                //refreshServer(serverRoot, client.dir());
+                clientTemp = new FileSharerClient();
+                refreshServer(serverRoot, clientTemp.dir());
             } catch (IOException e) {
+                System.err.println("Error uploading file");
                 e.printStackTrace();
             }
         });
 
         downloadBtn.setOnAction(event -> {
             try {
-                File newFile = new File(rootFolder.getPath() + "\\filename.txt");
-                if (newFile.createNewFile()) {
-                    System.out.println(downloadFile[0]);
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
-                    writer.write("Hello World\nBye");
-                    //writer.write(client.download(downloadFileName[0]));
-                    writer.close();
-                    refreshLocal(root, rootFolder);
-                    //refreshServer(serverRoot, client.dir());
-                } else {
-                    System.err.println("File already exists.");
-                }
+                FileSharerClient clientTemp = new FileSharerClient();
+                clientTemp.download(downloadFile[0], rootFolder.getPath());
+                refreshLocal(root, rootFolder);
+                clientTemp = new FileSharerClient();
+                refreshServer(serverRoot, clientTemp.dir());
             } catch (IOException e) {
-                System.out.println("An error occurred.");
+                System.err.println("Error downloading file");
                 e.printStackTrace();
             }
         });
 
         refreshBtn.setOnAction(event -> {
-            refreshLocal(root, rootFolder);
-            //refreshServer(serverRoot, client.dir());
+            try {
+                FileSharerClient clientTemp = new FileSharerClient();
+                refreshLocal(root, rootFolder);
+                refreshServer(serverRoot, clientTemp.dir());
+            } catch (IOException e) {
+                System.err.println("Can not update server folder");
+                e.printStackTrace();
+            }
         });
     }
 
