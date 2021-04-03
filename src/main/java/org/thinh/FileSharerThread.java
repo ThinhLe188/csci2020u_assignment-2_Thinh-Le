@@ -60,21 +60,21 @@ public class FileSharerThread extends Thread{
             String fileName = dataInputStream.readUTF();
             synchronized (this) {
                 File file = new File(serverRoot.getPath() + "\\" + fileName);
-                while (file.exists()) {
-                    int lastDotIndex = fileName.lastIndexOf('.');
-                    fileName = fileName.substring(0, lastDotIndex ) + " - Copy" + fileName.substring(lastDotIndex);
-                    file = new File(serverRoot.getPath() + "\\" + fileName);
+                if (!file.exists()) {
+                    int bytes = 0;
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    long size = dataInputStream.readLong();
+                    byte[] buffer = new byte[8*1024];
+                    while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+                        fileOutputStream.write(buffer,0,bytes);
+                        size -= bytes;
+                    }
+                    fileOutputStream.close();
+                    dataOutputStream.writeUTF("Upload successfully");
+                    return true;
+                } else {
+                    dataOutputStream.writeUTF("File name already exists");
                 }
-                int bytes = 0;
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                long size = dataInputStream.readLong();
-                byte[] buffer = new byte[8*1024];
-                while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
-                    fileOutputStream.write(buffer,0,bytes);
-                    size -= bytes;
-                }
-                fileOutputStream.close();
-                return true;
             }
         }
 

@@ -60,28 +60,29 @@ public class FileSharerClient {
             dataOutputStream.write(buffer,0, bytes);
             dataOutputStream.flush();
         }
-        socket.close();
         fileInputStream.close();
+        String errorMessage = dataInputStream.readUTF();
+        System.err.println(errorMessage);
+        socket.close();
     }
 
     public void download(String fileName, String path) throws IOException {
         dataOutputStream.writeUTF("DOWNLOAD");
         dataOutputStream.writeUTF(fileName);
         File file = new File(path + "\\" + fileName);
-        while (file.exists()) {
-            int lastDotIndex = fileName.lastIndexOf('.');
-            fileName = fileName.substring(0, lastDotIndex ) + " - Copy" + fileName.substring(lastDotIndex);
-            file = new File(path + "\\" + fileName);
+        if (!file.exists()) {
+            int bytes = 0;
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            long size = dataInputStream.readLong();
+            byte[] buffer = new byte[8*1024];
+            while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+                fileOutputStream.write(buffer,0,bytes);
+                size -= bytes;
+            }
+            fileOutputStream.close();
+            socket.close();
+        } else {
+            System.err.println("File name already exists");
         }
-        int bytes = 0;
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
-        long size = dataInputStream.readLong();
-        byte[] buffer = new byte[8*1024];
-        while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
-            fileOutputStream.write(buffer,0,bytes);
-            size -= bytes;
-        }
-        socket.close();
-        fileOutputStream.close();
     }
 }
