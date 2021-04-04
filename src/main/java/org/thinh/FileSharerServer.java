@@ -10,7 +10,6 @@ public class FileSharerServer {
     protected File serverRoot = new File("D:\\UOIT\\Winter2021\\CSCI_2020U\\assignment_2\\testing\\server");
 
     public static int SERVER_PORT = 6868;
-    public static int MAX_CLIENTS = 25;
 
     public FileSharerServer() {
         try {
@@ -22,10 +21,12 @@ public class FileSharerServer {
             while (true) {
                 System.out.println("---------------------------------------------");
                 clientSocket = serverSocket.accept();
-                System.out.println("Connected with " + clientSocket.getLocalAddress());
+                System.out.println("Connection established");
                 threads = new FileSharerThread(clientSocket, serverRoot);
                 threads.start();
-                System.out.println("Disconnected with " + clientSocket.getLocalAddress());
+                while(threads.isAlive()) {
+                }
+                System.out.println("Connection destroyed");
             }
         } catch (IOException e) {
             System.err.println("IOException while creating server connection");

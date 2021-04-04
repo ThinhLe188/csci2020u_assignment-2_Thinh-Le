@@ -1,6 +1,7 @@
 package org.thinh;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -9,16 +10,19 @@ public class FileSharerClient {
     private DataOutputStream dataOutputStream = null;
     private DataInputStream dataInputStream = null;
 
-    public  static String SERVER_ADDRESS = "localhost";
-    public  static int    SERVER_PORT = 6868;
+    public static String SERVER_ADDRESS = null;
+    public static int SERVER_PORT = 6868;
 
     public FileSharerClient() {
         try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            SERVER_ADDRESS = localhost.getHostAddress();
             socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+            System.out.println("Connection established");
         } catch (UnknownHostException e) {
-            System.err.println("Unknown host: "+ SERVER_ADDRESS);
+            System.err.println("Unknown host: " + SERVER_ADDRESS);
         } catch (IOException e) {
-            System.err.println("IOException while connecting to server: "+ SERVER_ADDRESS);
+            System.err.println("IOException while connecting to server: " + SERVER_ADDRESS);
         }
         if (socket == null) {
             System.err.println("Socket is null");
@@ -46,6 +50,7 @@ public class FileSharerClient {
             }
         }
         socket.close();
+        System.out.println("Connection destroyed");
         return dirContent;
     }
 
@@ -64,6 +69,7 @@ public class FileSharerClient {
         String errorMessage = dataInputStream.readUTF();
         System.err.println(errorMessage);
         socket.close();
+        System.out.println("Connection destroyed");
     }
 
     public void download(String fileName, String path) throws IOException {
@@ -80,9 +86,10 @@ public class FileSharerClient {
                 size -= bytes;
             }
             fileOutputStream.close();
-            socket.close();
         } else {
             System.err.println("File name already exists");
         }
+        socket.close();
+        System.out.println("Connection destroyed");
     }
 }
