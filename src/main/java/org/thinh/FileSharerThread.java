@@ -33,6 +33,7 @@ public class FileSharerThread extends Thread{
         }
         try {
             socket.close();
+            System.out.println("Connection destroyed");
         } catch (IOException e) {
             e.printStackTrace();
         }

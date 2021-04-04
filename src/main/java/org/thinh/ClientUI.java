@@ -66,6 +66,7 @@ public class ClientUI extends Application {
     public void start(Stage primaryStage) {
         //Text hostname = new Text(getParameters().getRaw().get(0));
         //String path = getParameters().getRaw().get(1);
+        String serverAddress = getParameters().getRaw().get(0);
         Label hostname = new Label();
         try {
             InetAddress address;
@@ -134,7 +135,7 @@ public class ClientUI extends Application {
         TreeItem<String> serverRoot = new TreeItem<>("Server", new ImageView("/images/icon-server.png"));
         serverRoot.setExpanded(true);
         try {
-            FileSharerClient client = new FileSharerClient();
+            FileSharerClient client = new FileSharerClient(serverAddress);
             refreshServer(serverRoot, client.dir());
         } catch (IOException e) {
             System.err.println("Can not update server folder");
@@ -168,11 +169,11 @@ public class ClientUI extends Application {
                 if (uploadFile[0].isDirectory()) {
                     System.err.println("Can not upload folder");
                 } else {
-                    clientTemp = new FileSharerClient();
+                    clientTemp = new FileSharerClient(serverAddress);
                     clientTemp.upload(uploadFile[0]);
                 }
                 refreshLocal(root, rootFolder);
-                clientTemp = new FileSharerClient();
+                clientTemp = new FileSharerClient(serverAddress);
                 refreshServer(serverRoot, clientTemp.dir());
             } catch (IOException e) {
                 System.err.println("Error uploading file");
@@ -182,10 +183,10 @@ public class ClientUI extends Application {
 
         downloadBtn.setOnAction(event -> {
             try {
-                FileSharerClient clientTemp = new FileSharerClient();
+                FileSharerClient clientTemp = new FileSharerClient(serverAddress);
                 clientTemp.download(downloadFile[0], rootFolder.getPath());
                 refreshLocal(root, rootFolder);
-                clientTemp = new FileSharerClient();
+                clientTemp = new FileSharerClient(serverAddress);
                 refreshServer(serverRoot, clientTemp.dir());
             } catch (IOException e) {
                 System.err.println("Error downloading file");
@@ -195,7 +196,7 @@ public class ClientUI extends Application {
 
         refreshBtn.setOnAction(event -> {
             try {
-                FileSharerClient clientTemp = new FileSharerClient();
+                FileSharerClient clientTemp = new FileSharerClient(serverAddress);
                 refreshLocal(root, rootFolder);
                 refreshServer(serverRoot, clientTemp.dir());
             } catch (IOException e) {

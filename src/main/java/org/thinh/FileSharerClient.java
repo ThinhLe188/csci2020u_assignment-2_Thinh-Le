@@ -13,10 +13,9 @@ public class FileSharerClient {
     public static String SERVER_ADDRESS = null;
     public static int SERVER_PORT = 6868;
 
-    public FileSharerClient() {
+    public FileSharerClient(String serverAddress) {
         try {
-            InetAddress localhost = InetAddress.getLocalHost();
-            SERVER_ADDRESS = localhost.getHostAddress();
+            SERVER_ADDRESS = serverAddress;
             socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
             System.out.println("Connection established");
         } catch (UnknownHostException e) {
