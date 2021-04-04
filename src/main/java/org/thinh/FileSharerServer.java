@@ -34,8 +34,8 @@ public class FileSharerServer {
                 threads[numClients].start();
                 numClients++;
                 if (numClients == MAX_CLIENTS) {
-                    for (int i = 0; i < MAX_CLIENTS; i++) {
-                        threads[i].join();
+                    for (FileSharerThread thread : threads) {
+                        thread.join();
                     }
                     numClients = 0;
                 }
