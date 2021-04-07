@@ -34,15 +34,11 @@ public class FileSharerServer {
                 threads[numClients].start();
                 numClients++;
                 if (numClients == MAX_CLIENTS) {
-                    for (FileSharerThread thread : threads) {
-                        thread.join();
-                    }
                     numClients = 0;
                 }
             }
         } catch (IOException e) {
             System.err.println("IOException while creating server connection");
-        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
