@@ -5,25 +5,25 @@
 This project is a file sharing system that can download and upload files from multiple clients.
 The file sharing clients will connect to a central server, which will respond to a single client command, and then disconnect. These are the following commands:
 
-* DIR
+* DIR:
     * Returns a listing of the contents of the shared directory in the server's machine
     * The server will disconnect immediately after sending the list of files to the client.
-* UPLOAD filename
+* UPLOAD filename:
     * Send the chosen file from the client to the server's shared directory
     * The server will connect and transfer the bytes, and save it as a new file "filename" in the shared directory
     * The server will disconnect immediately after saving the file
-* DOWNLOAD filename
+* DOWNLOAD filename:
     * The server will transfer the chosen file "filename" to the client, and then immediately disconnect
 
-**Server**
+**Server:**
 The server doesn't have any UI, but it is multi-threaded, each incoming client connection is handled with a seperate thread. This thread, and its corresponding socket, will remain open only until the command has been handled.
 
-**Client**
+**Client:**
 The client will have a  user interface. When the client is started, the client will be asked for the local folder. The client will then show a split screen showing two directories (local and shared). On the left will be the list of all files in the local folder of the local client. On the right will be the list of files in the shared folder of the server.
 
 ## Improvements:
-* **System**: Handle same filename file, able to transfer various types of file (tested: .txt, .pdf, .docx, .mp3, .mp4,...), able to navigate to sub-directories in local folder.
-* **Interface**: Added icon for the application and for each files and folders in the directory, added local host name, added "Refresh" button for user to refresh the state of both directories at will.
+* **System:** Handle same filename file, able to transfer various types of file (tested: .txt, .pdf, .docx, .mp3, .mp4,...), able to navigate to sub-directories in local folder.
+* **Interface:** Added icon for the application and for each files and folders in the directory, added local host name, added "Refresh" button for user to refresh the state of both directories at will.
 
 ![ui](ui.PNG)
 
