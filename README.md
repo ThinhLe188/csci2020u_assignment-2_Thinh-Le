@@ -28,7 +28,7 @@ The client will have a  user interface. When the client is started, the client w
 ![ui](ui.PNG)
 
 ## How To Run:
-1. Install Java, recommended SDK v11.0.10, [instruction](https://java.com/en/download/help/windows_manual_download.html)
+1. Install Java, requires Java JDK version 8 or higher, [instruction](https://www.oracle.com/java/technologies/javase-downloads.html)
 2. Install Gradle, recommend v6.8.3, [instruction](https://gradle.org/install/)
 2. Clone this repository into your local machine, [instruction](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
 3. Go into this repository in your local machine, run the program with following command in command line:
