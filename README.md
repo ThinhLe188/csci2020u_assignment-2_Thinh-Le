@@ -16,7 +16,7 @@ The file sharing clients will connect to a central server, which will respond to
     * The server will transfer the chosen file "filename" to the client, and then immediately disconnect
 
 **Server:**
-The server doesn't have any UI, but it is multi-threaded, each incoming client connection is handled with a seperate thread. This thread, and its corresponding socket, will remain open only until the command has been handled.
+The server doesn't have any UI, but it is multi-threaded, each incoming client connection is handled with a separate thread. This thread, and its corresponding socket, will remain open only until the command has been handled.
 
 **Client:**
 The client will have a  user interface. When the client is started, the client will be asked for the local folder. The client will then show a split screen showing two directories (local and shared). On the left will be the list of all files in the local folder of the local client. On the right will be the list of files in the shared folder of the server.
@@ -28,7 +28,7 @@ The client will have a  user interface. When the client is started, the client w
 ![ui](ui.PNG)
 
 ## How To Run:
-1. Install Java, recommeded SDK v11.0.10, [instruction](https://java.com/en/download/help/windows_manual_download.html)
+1. Install Java, recommended SDK v11.0.10, [instruction](https://java.com/en/download/help/windows_manual_download.html)
 2. Install Gradle, recommend v6.8.3, [instruction](https://gradle.org/install/)
 2. Clone this repository into your local machine, [instruction](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
 3. Go into this repository in your local machine, run the program with following command in command line:
