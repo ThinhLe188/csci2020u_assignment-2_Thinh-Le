@@ -1,5 +1,5 @@
 *.class
 *.bin
 out/
-testing/
+test-server/
 .vscode/
