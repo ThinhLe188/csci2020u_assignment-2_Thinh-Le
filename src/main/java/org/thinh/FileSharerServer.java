@@ -19,7 +19,7 @@ public class FileSharerServer {
             serverRoot = new File(path);
             serverSocket = new ServerSocket(SERVER_PORT);
             System.out.println("---------------------------------------------");
-            System.out.println("File Sharer Server Application is running");
+            System.out.println("File Sharer Application Server is running");
             System.out.println("---------------------------------------------");
             InetAddress localhost = InetAddress.getLocalHost();
             SERVER_ADDRESS = localhost.getHostAddress();
